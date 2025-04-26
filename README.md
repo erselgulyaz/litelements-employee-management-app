@@ -17,6 +17,11 @@ A single-page web application built with **LitElement (JavaScript version)** to 
 - Data persistence with localStorage
 - Code coverage control
 
+## Requirements
+
+- node version --> v22.14.0
+- npm version --> 10.9.2
+
 ---
 
 ## 🚀 Getting Started

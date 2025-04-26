@@ -43,13 +43,14 @@ export class EmployeeForm extends LitElement {
   validate() {
     const t = getLocale();
     const errors = {};
+    const phoneDigits = this.employee.phone.replace(/\D/g, '');
     if (!this.employee.firstName) errors.firstName = t.formErrors.firstName;
     if (!this.employee.lastName) errors.lastName = t.formErrors.lastName;
     if (!this.employee.dob) errors.dob = t.formErrors.dob;
     if (!this.employee.employmentDate) errors.employmentDate = t.formErrors.employmentDate;
     if (!this.employee.phone) {
       errors.phone = t.formErrors.phone;
-    } else if (!/^\+?[0-9]{10,15}$/.test(this.employee.phone)) {
+    } else if (!/^\d{10,15}$/.test(phoneDigits)) {
       errors.phone = t.formErrors.phoneNotCorrect;
     }
     if (!this.employee.email || !this.employee.email.includes('@')) errors.email = t.formErrors.emailNotCorrect;
@@ -62,8 +63,29 @@ export class EmployeeForm extends LitElement {
 
   handleInput(e) {
     const { name, value } = e.target;
-    this.employee = { ...this.employee, [name]: value };
-  }
+  
+    if (name === 'phone') {
+      const rawValue = value.replace(/\D/g, '');
+      let formattedValue = '';
+  
+      if (rawValue.length > 0) {
+        formattedValue += '(' + rawValue.substring(0, 3);
+      }
+      if (rawValue.length >= 4) {
+        formattedValue += ') ' + rawValue.substring(3, 6);
+      }
+      if (rawValue.length >= 7) {
+        formattedValue += ' ' + rawValue.substring(6, 8);
+      }
+      if (rawValue.length >= 9) {
+        formattedValue += ' ' + rawValue.substring(8, 10);
+      }
+  
+      this.employee = { ...this.employee, [name]: formattedValue };
+    } else {
+      this.employee = { ...this.employee, [name]: value };
+    }
+  }  
 
   handleSubmit(e) {
     e.preventDefault();
@@ -151,7 +173,7 @@ export class EmployeeForm extends LitElement {
           </div>
   
           <div class="form-item">
-            <label>${t.formLabels.positio }</label>
+            <label>${t.formLabels.position}</label>
             <select name="position" .value=${this.employee.position} @change=${this.handleInput}>
               <option value="">Seçiniz</option>
               <option value="Junior">Junior</option>
