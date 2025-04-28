@@ -61,14 +61,6 @@ npm run test
 ```
 This runs both development (test:dev) and production (test:prod) tests.
 
-## 🧩 Required: Install Browsers for Playwright
-To run the tests successfully, install the Playwright browsers:
-```bash
-npx playwright install
-```
-This will download Chromium, Firefox, and WebKit browsers needed by the test runner.
-
-
 ## 📈 Code Coverage
 To enable code coverage:
 
