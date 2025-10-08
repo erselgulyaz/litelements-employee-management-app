@@ -6,19 +6,28 @@ export const styles = css`
       border: 1px solid var(--color-borders);
       padding: 16px;
       border-radius: 12px;
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
     }
 
-    .card .line {
+    .card .column {
       margin: 0.3rem 0;
+      display: flex; 
+      flex-direction: column;
+      font-size: 16px;
     }
+
+    .card .column-title {
+      color: var(--color-silver);
+      font-size: 12px;
+    }
+
     .actions {
       padding-top: 20px;
       margin-top: auto;
       display: flex;
       gap: 10px;
+      width: 100%;
     }
 
     .card button {
@@ -36,5 +45,28 @@ export const styles = css`
 
     .card button:hover {
       background-color: var(--color-primary-dark);
+    }
+
+    .card .edit-button {
+      background-color: var(--color-secondary);
+    }
+    
+    .card .edit-button:hover {
+      background-color: var(--color-secondary-dark);
+    }
+
+    .card .icon-wrap svg {
+      width: 15px;
+    }
+
+    @media (max-width: 992px) {
+      .card .actions {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        width: 100%;
+      }
+      .card {
+        grid-template-columns: repeat(1, 1fr);
+      }
     }
 `;

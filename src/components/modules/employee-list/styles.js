@@ -103,14 +103,15 @@ export const styles = css`
     }
 
     .card-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
       padding-top: 16px;
+      column-gap: 60px;
+      row-gap: 40px;
     }
 
     .card-grid employee-card {
-      flex: 1 1 calc(33.333% - 1rem);
+      flex: 1 1 calc(50% - 1rem);
       display: flex;
       flex-direction: column;
     }
@@ -126,9 +127,6 @@ export const styles = css`
     }
 
     @media (max-width: 992px) {
-      .card-grid employee-card {
-        flex: 1 1 calc(50% - 1rem);
-      }
         
       .controls {
         flex-direction: column;
@@ -137,12 +135,24 @@ export const styles = css`
       .search-input {
         max-width: 100%;
       }
+
+      .card-grid {
+        row-gap: 20px;
+        column-gap: 20px;
+      }
     }
 
     @media (max-width: 768px) {
       .card-grid employee-card {
         flex: 1 1 100%;
       }
+
+      .card-grid {
+        display: flex;
+        flex-direction: column;
+        row-gap: 20px;
+      }
+
     }
 
   `;

@@ -40,26 +40,52 @@ export class EmployeeForm extends LitElement {
     }
   }
 
+  normalizeEmail(email) {
+    return (email || '').trim().toLowerCase();
+  }
+  
+  isDuplicateEmployee(emp, list) {
+    const email = this.normalizeEmail(emp.email);
+    return list.some(e => {
+      if (emp.id && e.id === emp.id) return false;
+      const eEmail = this.normalizeEmail(e.email);
+      return eEmail === email;
+    });
+  }  
+
   validate() {
     const t = getLocale();
     const errors = {};
-    const phoneDigits = this.employee.phone.replace(/\D/g, '');
+    const phoneDigits = (this.employee.phone || '').replace(/\D/g, '');
+  
     if (!this.employee.firstName) errors.firstName = t.formErrors.firstName;
     if (!this.employee.lastName) errors.lastName = t.formErrors.lastName;
     if (!this.employee.dob) errors.dob = t.formErrors.dob;
     if (!this.employee.employmentDate) errors.employmentDate = t.formErrors.employmentDate;
+  
     if (!this.employee.phone) {
       errors.phone = t.formErrors.phone;
     } else if (!/^\d{10,15}$/.test(phoneDigits)) {
       errors.phone = t.formErrors.phoneNotCorrect;
     }
-    if (!this.employee.email || !this.employee.email.includes('@')) errors.email = t.formErrors.emailNotCorrect;
+  
+    if (!this.employee.email || !this.employee.email.includes('@')) {
+      errors.email = t.formErrors.emailNotCorrect;
+    }
+  
     if (!this.employee.department) errors.department = t.formErrors.department;
-    if (!this.employee.position) errors.position = t.formErrors.position;
-
+    if (!this.employee.position)   errors.position   = t.formErrors.position;
+  
+    const list = store.getState('employees') || [];
+    if (this.isDuplicateEmployee(this.employee, list)) {
+      const existsByEmail = list.some(e => this.normalizeEmail(e.email) === this.normalizeEmail(this.employee.email) && e.id !== this.employee.id);
+  
+      if (existsByEmail) errors.email = t.formErrors?.emailExists ?? t.formErrors.isUsedEmail;
+    }
+  
     this.errors = errors;
     return Object.keys(errors).length === 0;
-  }
+  }  
 
   handleInput(e) {
     const { name, value } = e.target;
@@ -99,22 +125,31 @@ export class EmployeeForm extends LitElement {
   }
 
   saveNewEmployee() {
-    const list = store.getState('employees');
-    const newId = list.length > 0 ? Math.max(...list.map(emp => emp.id)) + 1 : 1;
+    const list = store.getState('employees') || [];
+    if (this.isDuplicateEmployee(this.employee, list)) {
+      this.validate();
+      return;
+    }
+    const newId = list.length > 0 ? Math.max(...list.map(emp => emp.id || 0)) + 1 : 1;
     const newList = [...list, { ...this.employee, id: newId }];
     store.setState('employees', newList);
     Router.go('/');
   }
-
+  
   confirmUpdate() {
-    const list = store.getState('employees');
+    const list = store.getState('employees') || [];
+    if (this.isDuplicateEmployee(this.employee, list)) {
+      this.validate();
+      this.showConfirmModal = false;
+      return;
+    }
     const updatedList = list.map(emp =>
       emp.id === this.employee.id ? { ...this.employee } : emp
     );
     store.setState('employees', updatedList);
     this.showConfirmModal = false;
     Router.go('/');
-  }
+  }  
 
   cancelUpdate() {
     this.showConfirmModal = false;
@@ -125,7 +160,8 @@ export class EmployeeForm extends LitElement {
 
     return html`
       <container-box>
-        <form @submit=${this.handleSubmit}>
+        <form class="form-wrapper" @submit=${this.handleSubmit}>
+          ${this.employee.id ? html`<div class="edit-message">You are editing ${this.employee.firstName} ${this.employee.lastName}</div>` : null}
           <div class="form-item">
             <label>${t.formLabels.firstName}</label>
             <input name="firstName" .value=${this.employee.firstName} @input=${this.handleInput} />
@@ -139,15 +175,15 @@ export class EmployeeForm extends LitElement {
           </div>
   
           <div class="form-item">
-            <label>${t.formLabels.dob}</label>
-            <input type="date" name="dob" .value=${this.employee.dob} @input=${this.handleInput} />
-            ${this.errors.dob ? html`<div class="error">${this.errors.dob}</div>` : ''}
-          </div>
-  
-          <div class="form-item">
             <label>${t.formLabels.employmentDate}</label>
             <input type="date" name="employmentDate" .value=${this.employee.employmentDate} @input=${this.handleInput} />
             ${this.errors.employmentDate ? html`<div class="error">${this.errors.employmentDate}</div>` : ''}
+          </div>
+
+          <div class="form-item">
+            <label>${t.formLabels.dob}</label>
+            <input type="date" name="dob" .value=${this.employee.dob} @input=${this.handleInput} />
+            ${this.errors.dob ? html`<div class="error">${this.errors.dob}</div>` : ''}
           </div>
   
           <div class="form-item">
@@ -182,7 +218,10 @@ export class EmployeeForm extends LitElement {
             </select>
             ${this.errors.position ? html`<div class="error">${this.errors.position}</div>` : ''}
           </div>
-          <button class="send-button" type="submit">${this.mode === 'edit' ? t.update : t.save}</button>
+          <div class="button-wrap">
+            <button class="send-button" type="submit">${this.mode === 'edit' ? t.update : t.save}</button>
+            <button class="cancel-button" type="button" @click=${() => window.history.back()}>${t.cancel}</button>
+          </div>
         </form>
       </container-box>
 
@@ -190,7 +229,7 @@ export class EmployeeForm extends LitElement {
         <div class="modal">
           <div class="modal-content">
             <button class="close-btn" @click=${this.cancelUpdate}>×</button>
-            <div class="modal-body"><strong>${this.employee.firstName} ${this.employee.lastName}</strong> adlı çalışan güncellenecek. Emin misiniz?</div>
+            <div class="modal-body"><strong>${this.employee.firstName} ${this.employee.lastName}</strong> ${t.editModalDescription}</div>
             <div class="modal-actions">
               <button class="proceed-btn" @click=${this.confirmUpdate}>${t.yes}</button>
               <button class="cancel-btn" @click=${this.cancelUpdate}>${t.no}</button>

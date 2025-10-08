@@ -7,8 +7,10 @@ export class EmployeeCreatePage extends LitElement {
   render() {
     const t = getLocale();
     return html`
-      <h2 style="text-align:center">${t.addNewEmployee}</h2>
-      <employee-form></employee-form>
+      <container-box>
+        <h2 style="color: var(--color-primary); padding: 0 15px;">${t.addNewEmployee}</h2>
+        <employee-form></employee-form>
+      </container-box>
     `;
   }
 }

@@ -34,19 +34,57 @@ export class EmployeeCard extends LitElement {
   }
 
   render() {
-    const { firstName, lastName, department, position, email, phone } = this.employee;
+    const { firstName, lastName, department, position, email, phone, employmentDate, dob } = this.employee;
+
     const t = getLocale();
 
     return html`
       <div class="card">
-        <span class="line"><strong>${firstName} ${lastName}</strong></span>
-        <span class="line">${t.employeeTableColumns.department}: ${department}</span>
-        <span class="line">${t.employeeTableColumns.position}: ${position}</span>
-        <span class="line">${t.employeeTableColumns.email}: ${email}</span>
-        <span class="line">${t.employeeTableColumns.phone}: ${phone}</span>
+        <div class="column">
+          <span class="column-title">${t.employeeTableColumns.name}:</span>
+          ${firstName}
+        </div>
+        <div class="column">
+          <span class="column-title">${t.employeeTableColumns.surname}:</span>
+          ${lastName}
+        </div>
+        <div class="column">
+          <span class="column-title">${t.employeeTableColumns.startDate}:</span>
+          ${employmentDate}
+        </div>
+        <div class="column">
+          <span class="column-title">${t.employeeTableColumns.birthDate}:</span>
+          ${dob}
+        </div>
+        <div class="column">
+          <span class="column-title">${t.employeeTableColumns.phone}:</span>
+          ${phone}
+        </div>
+        <div class="column">
+          <span class="column-title">${t.employeeTableColumns.email}:</span>
+          ${email}
+        </div>
+        <div class="column">
+          <span class="column-title">${t.employeeTableColumns.department}:</span>
+          ${department}
+        </div>
+        <div class="column">
+          <span class="column-title">${t.employeeTableColumns.position}:</span>
+          ${position}
+        </div>
         <div class="actions">
-          <button @click=${this.edit}>${t.edit}</button>
-          <button @click=${this.delete}>${t.delete}</button>
+          <button class="edit-button" @click=${this.edit}>
+            <span class="icon-wrap">
+              <icon-edit />
+            </span>
+            ${t.edit}
+          </button>
+          <button @click=${this.delete}>
+            <span class="icon-wrap">
+              <icon-delete />
+            </span>
+            ${t.delete}
+          </button>
         </div>
       </div>
     `;

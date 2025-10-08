@@ -37,10 +37,12 @@ export class EmployeeEditPage extends LitElement {
     const t = getLocale();
 
     return html`
-      <h2 style="text-align:center">${t.editEmployee}</h2>
-      ${this.employee
-        ? html`<employee-form .employee=${this.employee} mode="edit"></employee-form>`
-        : html`<p>${t.loading}...</p>`}
+      <container-box>
+        <h2 style="color: var(--color-primary); padding: 0 15px;">${t.editEmployee}</h2>
+        ${this.employee
+          ? html`<employee-form .employee=${this.employee} mode="edit"></employee-form>`
+          : html`<p>${t.loading}...</p>`}
+      </container-box>
     `;
   }
 }

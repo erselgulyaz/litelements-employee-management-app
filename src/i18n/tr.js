@@ -25,6 +25,7 @@ export const tr = {
   no: 'Hayır',
   update: "Güncelle",
   save: "Kaydet",
+  cancel: "İptal",
   editEmployee: "Çalışanı Düzenle",
   addNewEmployee: "Yeni Çalışan Ekle",
   loading: "Yükleniyor",
@@ -55,11 +56,13 @@ export const tr = {
     emailNotCorrect: "Geçerli bir e-posta giriniz",
     department: "Departman seçiniz",
     position: "Pozisyon seçiniz",
+    isUsedEmail: 'Bu e-posta zaten kayıtlı.',
   },
 
   addEmployee: 'Yeni Çalışan',
   confirmDelete: 'Bu çalışanı silmek istediğinize emin misiniz?',
   empty: 'Henüz çalışan bulunmamaktadır.',
   pagination: 'Sayfa',
+  editModalDescription: 'adlı çalışan güncellenecek. Emin misiniz?',
   };
   

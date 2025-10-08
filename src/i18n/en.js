@@ -7,8 +7,8 @@ export const en = {
   },
   employeeTableColumns: {
     select: "Select",
-    name: "Name",
-    surname: "Surname",
+    name: "First Name",
+    surname: "Last Name",
     startDate: "Date of Employment",
     birthDate: "Date of Birth",
     department: "Department",
@@ -25,6 +25,7 @@ export const en = {
   no: 'No',
   update: "Update",
   save: "Save",
+  cancel: "Cancel",
   editEmployee: "Edit Employee",
   addNewEmployee: "Add New Employee",
   loading: "Loading",
@@ -55,6 +56,7 @@ export const en = {
     emailNotCorrect: "Please enter a valid email address",
     department: "Please select a department",
     position: "Please select a position",
+    isUsedEmail: 'This email is already registered.',
   },
 
   addEmployee: 'Add Employee',
@@ -62,5 +64,6 @@ export const en = {
   
   empty: 'No employees found.',
   pagination: 'Page',
+  editModalDescription: 'the employee named will be updated. Are you sure?',
   };
   

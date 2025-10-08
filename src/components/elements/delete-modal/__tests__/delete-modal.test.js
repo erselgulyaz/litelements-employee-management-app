@@ -1,7 +1,28 @@
 import { fixture, html, expect, oneEvent } from '@open-wc/testing';
+
+const staticData = {
+  deleteModal: {
+    title: 'Emin misin?',
+    okButton: 'Onayla',
+    cancelButton: 'Çık',
+  },
+};
+
+vi.mock('@i18n/index', () => {
+  return {
+    getLocale: vi.fn(() => staticData),
+  };
+});
+
 import './../index';
 
 describe('DeleteModal Component', () => {
+
+  it('doesn`t render modal when open is false', async () => {
+    const el = await fixture(html`<delete-modal></delete-modal>`);
+    const root = el.shadowRoot;
+    expect(root.querySelector(".modal")).to.not.exist;
+  });
 
   it('should render modal when open is true', async () => {
     const el = await fixture(html`<delete-modal open message="Test message"></delete-modal>`);
@@ -24,5 +45,15 @@ describe('DeleteModal Component', () => {
     setTimeout(() => button.click());
     const event = await oneEvent(el, 'cancel');
     expect(event).to.exist;
+  });
+
+  it('when the open prop is set to false while the modal is open, the modal is generated from the DOM.', async () => {
+    const el = await fixture(html`<delete-modal open></delete-modal>`);
+    expect(el.shadowRoot.querySelector('.modal')).to.exist;
+
+    el.open = false;
+    await el.updateComplete;
+
+    expect(el.shadowRoot.querySelector('.modal')).to.not.exist;
   });
 });

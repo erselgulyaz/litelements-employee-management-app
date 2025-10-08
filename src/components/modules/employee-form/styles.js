@@ -1,11 +1,16 @@
 import { css } from 'lit';
 
 export const styles = css`
-    form {
+    .form-wrapper {
+      background-color: var(--color-white);
       display: grid;
-      gap: 16px;
-      max-width: 500px;
+      position: relative;
+      gap: 50px;
+      width: 100%;
+      padding: 50px 20px;
       margin: 2rem auto;
+      grid-template-columns: repeat(3, 1fr);
+      box-sizing: border-box;
     }
 
     .form-item {
@@ -26,6 +31,13 @@ export const styles = css`
       outline: none;
       border: 1px solid var(--color-borders);
     }
+    
+    .button-wrap {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
 
     .send-button {
       background-color: var(--color-primary);
@@ -35,6 +47,18 @@ export const styles = css`
       padding: 10px 25px;
       border-radius: 10px;
       cursor: pointer;
+      min-width: 300px;
+    }
+
+    .cancel-button {
+      background-color: transparent;
+      color: var(--color-secondary);
+      border: 1px solid var(--color-secondary);
+      outline: none;
+      padding: 10px 25px;
+      border-radius: 10px;
+      cursor: pointer;
+      min-width: 300px;
     }
 
     .error {
@@ -102,5 +126,31 @@ export const styles = css`
       font-size: 22px;
       cursor: pointer;
       color: var(--color-primary);
+    }
+
+    .edit-message {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+    }
+
+    @media (max-width: 992px) {
+      .form-wrapper {
+        gap: 20px;
+      }
+    }
+      
+    @media (max-width: 768px) {
+        .form-wrapper {
+          grid-template-columns: repeat(1, 1fr);
+          gap: 10px;
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+        .button-wrap {
+          display: flex;
+          flex-direction: column;
+        }
+        
     }
   `;
